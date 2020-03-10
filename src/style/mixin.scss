@@ -1,0 +1,6 @@
+@mixin w($px) {
+  width:$px / $remSize + rem
+}
+@mixin h($px) {
+  height:$px / $remSize + rem
+}
