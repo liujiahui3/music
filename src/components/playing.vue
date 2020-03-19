@@ -1,6 +1,7 @@
 <template>
   <div class="play"
-       v-if="songer.length">
+       v-if="songer.length"
+       @touchmove.prevent="">
     <div class="big"
          v-if="fullScreen">
       <div class="back">
@@ -18,7 +19,7 @@
              alt="">
       </div>
       <!-- 背景 -->
-      <div class="bg">
+      <div class="bg" @click.prevent="">
         <img :src="imgUrl"
              alt=""></div>
       <!-- 歌词 -->
@@ -38,7 +39,7 @@
               @click="play = !play"></span>
         <span class="iconfont icon-49xiayishou"
               @click="next"></span>
-        <span>❤</span>
+        <span :class="'iconfont icon-love-b '+(isLike?'red':'yellow')" @click="like"></span>
       </div>
     </div>
     <div class="small"
@@ -69,13 +70,11 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import myProgress from './progress'
+import { Toast } from 'mint-ui'
 import lyric from './lyric'
 export default {
   components: {
     myProgress, lyric
-  },
-  mounted () {
-
   },
   data () {
     return {
@@ -83,14 +82,19 @@ export default {
       play: true,
       enTime: 0,
       startTime: 0,
-      changeTime: 0
+      changeTime: 0,
+      isLike: false
     }
   },
   computed: {
     ...mapState(['songer', 'nowIndex', 'fullScreen', 'loop']),
     imgUrl () {
       // 图片地址
-      return `https://y.gtimg.cn/music/photo_new/T002R300x300M000${this.songer[this.nowIndex].albummid}.jpg?max_age=2592000`
+      if (this.songer[this.nowIndex].albummid) {
+        return `https://y.gtimg.cn/music/photo_new/T002R300x300M000${this.songer[this.nowIndex].albummid}.jpg?max_age=2592000`
+      } else {
+        return 'http://p1.music.126.net/iaNMfCRTZ34fP0MjY9rOjg==/7898891534959085.jpg?param=300y300'
+      }
     }
   },
   methods: {
@@ -111,7 +115,6 @@ export default {
     },
     next () {
       // 下一首
-      // console.log(this.songer)
       this.nextSong()
       this.play = true
     },
@@ -137,11 +140,83 @@ export default {
           this.changeNowIndex(renNum)
           break
       }
+    },
+    like () {
+      if (!this.likelist) {
+        this.likelist = []
+      }
+      if (this.isLike) {
+        // 如果一开始时true，则将这首歌从喜欢列表里删除
+        this.likelist = this.likelist.filter(item => {
+          return item.songmid !== this.songMes.songmid
+        })
+      } else {
+        // 如果一开始时false，则将这首歌加入喜欢列表
+        this.likelist.push(this.songMes)
+      }
+      // 结束操作后从新将喜欢列表存入本地存储
+      localStorage.setItem('likelist', JSON.stringify(this.likelist))
+      // 是否喜欢取反
+      this.isLike = !this.isLike
+    },
+    getLikeList () {
+      if (this.likelist) {
+        // 查询本地存储中是否有当前歌曲
+        const result = this.likelist.some(item => item.songmid === this.songMes.songmid)
+        result ? this.isLike = true : this.isLike = false
+      }
+    },
+    getNowMes () {
+      // 当前播放歌曲的信息
+      this.songMes = this.songer[this.nowIndex]
+      // 从本地存储获取喜欢列表
+      this.likelist = JSON.parse(localStorage.getItem('likelist'))
+    },
+    getLatelyList () {
+      // 从本地存储获取最近播放列表
+      let latelyList = []
+      const list = JSON.parse(localStorage.getItem('latelyList'))
+      if (!list) {
+        latelyList = []
+      } else {
+        latelyList = list
+      }
+      // 查询本地存储中是否有当前歌曲,如果存在先删除，再加到第一个位置
+      latelyList = latelyList.filter(item => {
+        return item.songmid !== this.songMes.songmid
+      })
+      latelyList.unshift(this.songMes)
+      // 将最近播放从新加入本地存储
+      localStorage.setItem('latelyList', JSON.stringify(latelyList))
     }
   },
   watch: {
-    nowIndex () {
+    songer () {
+      setTimeout(() => {
+        this.play = true
+        this.$refs.aduio.play()
+      }, 500)
+      // 是否加入喜欢，最近播放
+      this.getNowMes()
+      this.getLikeList()
+      this.getLatelyList()
+    },
+    nowIndex (newValue) {
+      // 如果播放地址不存在则跳到下一首
+      if (!this.songer[this.nowIndex].aduioUrl) {
+        const instance = Toast('暂无版权')
+        setTimeout(() => {
+          instance.close()
+          this.nextSong()
+        }, 2000)
+        this.play = false
+        return false
+      }
       this.play = true
+      // 是否加入喜欢，最近播放
+      this.getNowMes()
+      this.getLikeList()
+      this.getLatelyList()
     },
     play (newValue, oldValue) {
       // 暂停和播放切换
@@ -182,6 +257,12 @@ export default {
   display: flex;
   font-size: 24px;
   justify-content: space-around;
+}
+.yellow{
+  color: $yellow;
+}
+.red{
+  color: red !important;
 }
 .bg {
   img {
@@ -226,6 +307,9 @@ export default {
     font-size: $fs-m;
     padding-bottom: 30px;
     text-align: center;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
   }
   .img {
     @include w(300);

@@ -1,11 +1,17 @@
 <template>
   <div class="top">
-    <h1>Chicken Music</h1>
-    <span class="iconfont icon-wode"></span>
+    <h1>Music</h1>
+    <span class="iconfont icon-wode" @click="toUser()"> </span>
   </div>
 </template>
 <script>
-export default {}
+export default {
+  methods: {
+    toUser () {
+      this.$router.push('/user')
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
 .top {

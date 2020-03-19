@@ -54,6 +54,9 @@ export default {
       this.refreshData()
     })
   },
+  activated () {
+    this.bs.refresh()
+  },
   methods: {
     // better-scroll初始化
     BSinit () {

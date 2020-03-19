@@ -15,7 +15,6 @@ async function fromSinger (id) {
 async function fromRank (id) {
   let result = []
   // 根据歌手id获取对应的歌曲数据
-  // console.log(id)
   result = await getRankSong(id).then(res => {
     // 对歌曲数据进行筛选,获取自己需要的
     return processRankData(res.data)
@@ -46,6 +45,7 @@ function processData (data) {
 }
 function processRankData (data) {
   const obj = {}
+  console.log(data)
   obj.topinfo = data.topinfo
   // 对歌曲数据进行筛选,获取自己需要的
   const result = data.songlist.map((item) => {

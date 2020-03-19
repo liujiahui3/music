@@ -78,6 +78,9 @@ export default {
   display: flex;
   justify-content: center;
   .content {
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
     @include w(300);
     text-align: center;
     font-size: $fs-m;

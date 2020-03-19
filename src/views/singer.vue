@@ -121,6 +121,11 @@ export default {
       })
     }
   },
+  activated () {
+    if (this.Bs) {
+      this.BS.refresh()
+    }
+  },
   computed: {
     // 首字母数组
     quickData () {
@@ -134,13 +139,16 @@ export default {
 <style lang="scss" scoped>
 @import "../style";
 .wrapper {
+  touch-action: none;
   background: #222;
   position: fixed;
   top: 88px;
   left: 0;
   right: 0;
   bottom: 0;
-
+  .content{
+    touch-action: none
+  }
   h3 {
     color: rgba(255, 255, 255, 0.5);
     background: #333333;

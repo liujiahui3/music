@@ -6,6 +6,8 @@ import 'animate.css/animate.css'
 import store from './store'
 import MINTUI from 'mint-ui'
 import 'mint-ui/lib/style.min.css'
+// import vConsole from 'vconsole'
+// Vue.prototype.$vConsole = new vConsole()
 Vue.use(MINTUI)
 
 Vue.config.productionTip = false

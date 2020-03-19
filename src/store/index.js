@@ -8,7 +8,7 @@ export default new Vuex.Store({
     fullScreen: true,
     songer: [],
     nowIndex: -1,
-    loop: 1
+    loop: 2
   },
   mutations: {
     changeSonger (state, songList) {

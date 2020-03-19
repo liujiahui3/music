@@ -37,12 +37,12 @@ const getSingerData = () => {
 /** *********** 排行页************* */
 const getRankList = () => {
   // 请求歌曲列表,并返回一个promise对象
-  const url = 'music/fcj/music/topRank'
+  const url = '/music/fcj/music/topRank'
   return axios(url)
 }
 const getRankSong = (topid) => {
   // 请求歌曲列表,并返回一个promise对象
-  const url = 'music/fcj/music/rankSongList'
+  const url = '/music/fcj/music/rankSongList'
   return axios.post(url, { topid })
 }
 /** *********** 详情页************* */
@@ -59,7 +59,6 @@ const getSongUrl = mids => {
 /** *********** 搜素页************* */
 const getSearch = kw => {
   // 请求歌曲链接,并返回一个promise对象
-  console.log(kw)
   var url = `/hehe/music/api/search?g_tk=1928093487&inCharset=utf-8&outCharset=utf-8&notice=0&format=json&w=${kw}&p=1&perpage=20&n=20&catZhida=1&zhidaqu=1&t=0&flag=1&ie=utf-8&sem=1&aggr=0&remoteplace=txt.mqq.all&uin=0&needNewCode=1&platform=h5`
   return axios(url)
 }

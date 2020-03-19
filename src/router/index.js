@@ -10,6 +10,7 @@ const singer = () => import('../views/singer')
 const search = () => import('../views/search')
 const rank = () => import('../views/rank')
 const detail = () => import('../views/Detail')
+const user = () => import('../views/User')
 
 Vue.use(VueRouter)
 
@@ -43,6 +44,10 @@ const routes = [
     component: search
   },
   {
+    path: '/user',
+    component: user
+  },
+  {
     path: '/rank',
     component: rank,
     children: [
@@ -71,7 +76,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  mode: 'hash',
+  mode: 'history',
   base: process.env.BASE_URL,
   routes
 })

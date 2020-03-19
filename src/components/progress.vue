@@ -6,7 +6,7 @@
        @click="seek"
         ref="content"
         @touchstart="touchStart"
-        @touchmove="touchMove"
+        @touchmove.prevent="touchMove"
         @touchend="touchEnd">
         <div class="location" ref="location"></div>
         <div class="dot" ref="dot">

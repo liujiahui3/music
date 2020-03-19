@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "3050492",
+      "name": "爱心",
+      "font_class": "love-b",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
       "icon_id": "3740033",
       "name": "奖杯",
       "font_class": "yijingkuozhandaochuSVG_",

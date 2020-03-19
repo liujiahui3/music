@@ -37,4 +37,8 @@ li {
   padding-top: 88px;
   background: $black2;
 }
+html{
+touch-action:none;
+touch-action:pan-y;
+}
 </style>
